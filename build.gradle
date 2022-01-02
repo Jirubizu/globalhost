@@ -6,7 +6,6 @@ plugins {
 
 version = project.mod_version
 group = project.maven_group
-modrinth = "$System.env.modrinth"
 
 repositories {
     // Add repositories to retrieve artifacts from in here.
@@ -104,12 +103,19 @@ publishing {
     }
 }
 
-task publishModrinth (type: TaskModrinthUpload) {
-    token = modrinth // Use an environment property if releasing your source code on GitHub!
-    projectId = 'modrinthModID' // The ID of your modrinth project, slugs will not work.
-    versionNumber = '1.0.0' // The version of the mod to upload.
-    uploadFile = remapJar // This links to a task that builds your mod jar and sets "uploadFile" to the mod jar.
-    addGameVersion('1.18.1') // Any minecraft version.
-    addLoader('fabric') // Can be fabric or forge. Modrinth will support liteloader and rift at a later date.
+import com.modrinth.minotaur.TaskModrinthUpload
+
+task publishModrinth (type: TaskModrinthUpload){ // Make sure it runs after build!
+    onlyIf {
+        System.getenv("modrinth") // Only attempt to run this task if the MODRINTH variable is set, otherwise SKIP it
+    }
+
+    token = System.getenv("modrinth") // An environment property called MODRINTH that is your token, set via Gradle CLI, GitHub Actions, Idea Run Configuration, or other
+    projectId = 'wFOTiTPf'
+    versionNumber = '1.0.0' // Will fail if Modrinth has this version already
+    // On fabric, use 'remapJar' instead of 'jar'
+    uploadFile = remapJar // This is the java jar task. If it can't find the jar, try 'jar.outputs.getFiles().asPath' in place of 'jar'
+    addGameVersion('1.18.1') // Call this multiple times to add multiple game versions. There are tools that can help you generate the list of versions
+    addLoader('fabric')
 }
 
