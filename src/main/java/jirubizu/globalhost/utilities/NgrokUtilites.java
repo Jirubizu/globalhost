@@ -1,7 +1,6 @@
 package jirubizu.globalhost.utilities;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.realms.Request;
 
 import java.io.*;
 import java.net.URL;
@@ -13,18 +12,9 @@ public class NgrokUtilites
 {
     public static void CheckNgrok()
     {
-        File ngrokFile = new File(FabricLoader.getInstance().getConfigDir() + "/globalhost/ngrok.zip");
+        File ngrokFile = new File(getNgrokFile());
         if (!ngrokFile.exists())
         {
-            try
-            {
-                ngrokFile.createNewFile();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-
             downloadNgrok();
         }
 
@@ -32,13 +22,12 @@ public class NgrokUtilites
 
     public static String getNgrokFile()
     {
-        return FabricLoader.getInstance().getConfigDir() + "/globalhost/ngrok/ngrok";
+        return FabricLoader.getInstance().getConfigDir() + "/globalhost/ngrok";
     }
 
     private static void downloadNgrok()
     {
-        File ngrokFile = new File(FabricLoader.getInstance().getConfigDir() + "/globalhost/ngrok.zip");
-
+        File ngrokFile = new File("ngrok.zip");
         switch (Objects.requireNonNull(OSUtilities.getOperatingSystem()))
         {
 
@@ -49,6 +38,7 @@ public class NgrokUtilites
 
             }
         }
+        ngrokFile.delete();
     }
 
     private static void downloadFile(File file, String downloadUrl)
@@ -68,7 +58,7 @@ public class NgrokUtilites
 
         }
 
-        unzip(file.getPath(), file.getParent()+"/ngrok");
+        unzip(file.getPath(), getNgrokFile());
     }
 
     private static void unzip(String zipFilePath, String destDir)
