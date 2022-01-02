@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "globalhost",
+  "version": "${version}",
+  "name": "Globalhost",
+  "description": "",
+  "authors": ["jirubizu"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/globalhost/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "jirubizu.globalhost.client.GlobalhostClient"
+    ],
+    "main": [
+      "jirubizu.globalhost.Globalhost"
+    ],
+    "modmenu": [
+      "jirubizu.globalhost.config.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "globalhost.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.12",
+    "fabric": "*",
+    "minecraft": "1.18.1"
+  }
+}
